@@ -1,9 +1,15 @@
+// ApiResponse → Shapes the "good news" (success).
+// ApiError → Shapes the "bad news" (errors).
+// asyncHandler → Makes sure errors from async functions don’t crash your app and are passed properly to ApiError.
+
+
+
 import e from "express";
 
 const asyncHandler = (requestHandler) => {
-    (req, res, next)=>{
+    return (req, res, next)=>{
         Promise.resolve(requestHandler(req, res, next)).catch((error)=>next(error));
-    }
+    } 
 };
 
 
