@@ -22,7 +22,7 @@ app.use(cookieParser());  // to support cookie parsing
 
 
 //routes import
-import userRoutes from "./routes/userRoutes.js";
+import userRoutes from "./routes/user.routes.js";
 
 app.use("/api/v1/users", userRoutes);  // whenever we hit /users it will go to userRoutes
 
