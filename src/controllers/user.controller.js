@@ -1,8 +1,9 @@
 import {asyncHandler} from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js";
-import  User from "../models/user.model.js";
+import  {User} from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import path from "path";
 
 // Controller function to handle user registration
 
@@ -29,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
     // send success response to frontend
 
 
-   const { username, email, password, avatar } = req.body;  //destructuring
+   const { fullName,  username, email, password, avatar } = req.body;  //destructuring
     console.log(email);
 
 
@@ -49,7 +50,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required");
     }
 
-    const existedUser =  User.findOne({   
+    const existedUser = await User.findOne({   
         $or: [{ email }, { username }]
      })   //checking if user already exists
 
@@ -59,8 +60,8 @@ const registerUser = asyncHandler(async (req, res) => {
     }
      
     //req.body given by frontend that is by express.json() middleware and req.files given by multer middleware
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    const avatarLocalPath = req.files?.avatar[0]?.path ? path.resolve(req.files.avatar[0].path).replace(/\\/g, "/") : undefined;
+    const coverImageLocalPath = req.files?.coverImage[0]?.path ? path.resolve(req.files.coverImage[0].path).replace(/\\/g, "/") : undefined;
 
     if(!avatarLocalPath) {
         throw new ApiError(400, "Avatar is required");
@@ -75,6 +76,10 @@ const registerUser = asyncHandler(async (req, res) => {
     const avatarUploadResponse = await uploadOnCloudinary(avatarLocalPath);
     const coverImageUploadResponse = await uploadOnCloudinary(coverImageLocalPath);
 
+
+    console.log("req.files:", req.files);
+    console.log("avatarLocalPath:", avatarLocalPath);
+    
     if(!avatarUploadResponse) {
         throw new ApiError(500, "Could not upload avatar. Please try again later.");
     }
