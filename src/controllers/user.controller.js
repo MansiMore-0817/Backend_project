@@ -59,9 +59,21 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User already exists with this email or username");
     }
      
+
+    console.log("req.body:", req.body);
+    console.log("req.files:", req.files);
+
+
     //req.body given by frontend that is by express.json() middleware and req.files given by multer middleware
     const avatarLocalPath = req.files?.avatar[0]?.path ? path.resolve(req.files.avatar[0].path).replace(/\\/g, "/") : undefined;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path ? path.resolve(req.files.coverImage[0].path).replace(/\\/g, "/") : undefined;
+    //const coverImageLocalPath = req.files?.coverImage[0]?.path ? path.resolve(req.files.coverImage[0].path).replace(/\\/g, "/") : undefined;
+
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
+
+
 
     if(!avatarLocalPath) {
         throw new ApiError(400, "Avatar is required");
@@ -84,9 +96,9 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Could not upload avatar. Please try again later.");
     }
 
-    if(!coverImageUploadResponse) {
-        throw new ApiError(500, "Could not upload cover image. Please try again later.");
-    }
+    // if(!coverImageUploadResponse) {
+    //     throw new ApiError(500, "Could not upload cover image. Please try again later.");
+    // }
 
     const user = await User.create({
         fullName,

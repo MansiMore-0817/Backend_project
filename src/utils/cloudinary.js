@@ -104,12 +104,9 @@ const uploadOnCloudinary = async (localFilePath) => {
       folder: "users",
     });
 
-    console.log("✅ File uploaded to Cloudinary:", result.secure_url);
+    //console.log("✅ File uploaded to Cloudinary:", result.secure_url);
 
-    fs.unlink(localFilePath, (err) => {
-      if (err) console.warn("⚠️ Failed to delete local file:", err.message);
-    });
-
+    fs.unlinkSync(localFilePath);
     return result;
   } catch (error) {
     console.error("❌ Cloudinary upload error:", error);
