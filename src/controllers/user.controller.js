@@ -30,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
     // send success response to frontend
 
 
-   const { fullName,  username, email, password, avatar } = req.body;  //destructuring
+   const { fullName,  username, email, password, avatar, coverImage } = req.body;  //destructuring
     console.log(email);
 
 
@@ -103,7 +103,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const user = await User.create({
         fullName,
         avatar: avatarUploadResponse.url,
-        coverImageLocalPath: coverImageUploadResponse?.url || "",
+        coverImage: coverImageUploadResponse?.url || "",
         username: username.toLowerCase(),
         email,
         password
@@ -126,3 +126,10 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 export { registerUser };
+
+
+
+
+
+
+

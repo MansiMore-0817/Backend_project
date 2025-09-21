@@ -104,7 +104,7 @@ const uploadOnCloudinary = async (localFilePath) => {
       folder: "users",
     });
 
-    //console.log("✅ File uploaded to Cloudinary:", result.secure_url);
+    console.log("✅ File uploaded to Cloudinary:", result.secure_url);
 
     fs.unlinkSync(localFilePath);
     return result;
