@@ -1,8 +1,8 @@
 // verifies whether user is there or not
 
-import { User } from "../models/user.models";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
+import { User } from "../models/user.models.js";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 
 
@@ -30,6 +30,7 @@ export const verifyJWT = asyncHandler(async(req, res, next)=>{
         req.user = user;
         next();
     } catch (error) {
+         console.error("🔍 Auth Middleware Error:", error);
         throw new ApiError(401, error?.message || "Invalid Access Token");
 
 
